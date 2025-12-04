@@ -11,13 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('email',100)->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->rememberToken();
+        Schema::create('niveau', function (Blueprint $table) {
+            $table->increments("code_niveau");
+             $table->string("label_niveau");
+             $table->text("description_niveau");
+             $table->string("code_filiere");
+             $table->foreign('code_filiere')->references('code_filiere')->on('filiere')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -27,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('niveau');
     }
 };
