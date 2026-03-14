@@ -1,9 +1,8 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
-
-use App\Http\Controllers\filiereController;
-use App\Http\Controllers\niveauController;
+use App\Http\Controllers\FiliereController;
+use App\Http\Controllers\NiveauController;
 
 Route::get('/', function () {
     return view('welcome');
