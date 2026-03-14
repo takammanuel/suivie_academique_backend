@@ -31,7 +31,7 @@ class Programme extends Model
     // Relations
     public function ec()
     {
-        return $this->belongsTo(EC::class, 'code_ec', 'code_ec');
+        return $this->belongsTo(Ec::class, 'code_ec', 'code_ec');
     }
 
     public function salle()

@@ -4,12 +4,12 @@ namespace Database\Seeders;
 
 use App\Models\Filiere;
 use App\Models\Niveau;
-use App\Models\EC;
+use App\Models\Ec;
 use App\Models\Ue;
 use App\Models\Salle;
 use App\Models\Enseigne;
 use App\Models\Personnel;
-Use App\Models\Programme;
+use App\Models\Programme;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
