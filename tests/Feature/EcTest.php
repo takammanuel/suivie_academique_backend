@@ -56,7 +56,7 @@ class EcTest extends TestCase
         $response->assertStatus(201)
                  ->assertJsonFragment(['code_ec' => 'EC1001']);
 
-        $this->assertDatabaseHas('ec', $data);
+        $this->assertDatabaseHas('ecs', $data);
     }
 
     public function test_update_ec(): void
@@ -82,7 +82,7 @@ class EcTest extends TestCase
         $response->assertStatus(200)
                  ->assertJsonFragment(['label_ec' => 'Nouveau Label']);
 
-        $this->assertDatabaseHas('ec', array_merge(['code_ec' => $ec->code_ec], $payload));
+        $this->assertDatabaseHas('ecs', array_merge(['code_ec' => $ec->code_ec], $payload));
     }
 
     public function test_delete_ec(): void
@@ -106,6 +106,6 @@ class EcTest extends TestCase
         $response->assertStatus(200)
                  ->assertJsonFragment(['message' => 'Suppression réussie']);
 
-        $this->assertDatabaseMissing('ec', ['code_ec' => 'EC4001']);
+        $this->assertDatabaseMissing('ecs', ['code_ec' => 'EC4001']);
     }
 }

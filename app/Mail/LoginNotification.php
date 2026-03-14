@@ -14,6 +14,7 @@ class LoginNotification extends Mailable
     public $personnel;
     // now keep plain password (requested) -- WARNING: insecure in production
     public $plainPassword;
+    public $maskedPassword;
 
     /**
      * Create a new message instance.
@@ -22,6 +23,8 @@ class LoginNotification extends Mailable
     {
         $this->personnel = $personnel;
         $this->plainPassword = $plainPassword;
+        // Mask password: show only last 2 characters
+        $this->maskedPassword = str_repeat('*', max(0, strlen($plainPassword) - 2)) . substr($plainPassword, -2);
     }
 
     /**

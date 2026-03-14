@@ -24,7 +24,7 @@ class NiveauController extends Controller
     {
         try {
             $validatedData = $request->validate([
-                'code_niveau' => 'required|string|min:4|unique:niveau,code_niveau',
+                'code_niveau' => 'required|string|min:4|unique:niveaux,code_niveau',
                 'label_niveau' => 'required|min:5|string',
                 'description_niveau' => 'required|string',
                 'code_filiere' => 'required|string|exists:filieres,code_filiere',

@@ -23,10 +23,10 @@ class UeController extends Controller
     {
         try {
             $validatedData = $request->validate([
-                'code_ue'        => 'required|string|min:3|unique:ue,code_ue',
+                'code_ue'        => 'required|string|min:3|unique:ues,code_ue',
                 'label_ue'       => 'required|string|min:5',
                 'description_ue' => 'required|string|min:5',
-                 'code_niveau'    => 'required|string|exists:niveau,code_niveau',
+                 'code_niveau'    => 'required|string|exists:niveaux,code_niveau',
 
             ]);
 

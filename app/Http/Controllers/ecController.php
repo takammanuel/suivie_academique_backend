@@ -28,7 +28,7 @@ class EcController extends Controller
             'nb_heures_ec'   => 'nullable|integer|min:1',
             'cours'          => 'nullable|string',
             'nb_credit_ec'   => 'nullable|integer|min:1',
-            'code_ue'        => 'nullable|string|exists:ue,code_ue',
+            'code_ue'        => 'nullable|string|exists:ues,code_ue',
             'pdf_file'       => 'nullable|file|mimes:pdf|max:5120',
         ]);
 
@@ -76,7 +76,7 @@ return response()->json($ec, 201);
                 'nb_heures_ec'   => 'sometimes|integer|min:1',
                 'cours'          => 'sometimes|string',
                 'nb_credit_ec'   => 'sometimes|integer|min:1',
-                'code_ue'        => 'sometimes|string|exists:ue,code_ue',
+                'code_ue'        => 'sometimes|string|exists:ues,code_ue',
                 'pdf_file'       => 'sometimes|file|mimes:pdf|max:5120',
             ]);
 

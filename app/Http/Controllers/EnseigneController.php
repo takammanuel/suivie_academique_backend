@@ -23,7 +23,7 @@ class EnseigneController extends Controller
     {
         try {
             $validated = $request->validate([
-                'code_ec'        => 'required|string|exists:ec,code_ec',
+                'code_ec'        => 'required|string|exists:ecs,code_ec',
                 'code_personnel' => 'required|string|exists:personnel,code_personnel',
             ]);
 
@@ -80,7 +80,7 @@ class EnseigneController extends Controller
             }
 
             $validated = $request->validate([
-                'code_ec'        => 'sometimes|string|exists:ec,code_ec',
+                'code_ec'        => 'sometimes|string|exists:ecs,code_ec',
                 'code_personnel' => 'sometimes|string|exists:personnel,code_personnel',
             ]);
 
