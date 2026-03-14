@@ -11,12 +11,20 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('niveau', function (Blueprint $table) {
-            $table->increments("code_niveau");
-             $table->string("label_niveau");
-             $table->text("description_niveau");
-             $table->string("code_filiere");
-             $table->foreign('code_filiere')->references('code_filiere')->on('filiere')->onDelete('cascade');
+        Schema::create('niveaux', function (Blueprint $table) {
+            // code_niveau en VARCHAR et clé primaire
+            $table->string('code_niveau', 20)->primary();
+
+            $table->string('label_niveau', 191);
+            $table->text('description_niveau');
+
+            // clé étrangère vers filieres
+            $table->string('code_filiere', 20);
+            $table->foreign('code_filiere')
+                  ->references('code_filiere')
+                  ->on('filieres')
+                  ->onDelete('cascade');
+
             $table->timestamps();
         });
     }
@@ -26,6 +34,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('niveau');
+        Schema::dropIfExists('niveaux');
     }
 };

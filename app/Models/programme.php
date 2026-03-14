@@ -9,19 +9,14 @@ class Programme extends Model
 {
     use HasFactory;
 
-    protected $table = 'programme'; // nom exact de la table
-
-    protected $primaryKey = 'code_programme'; // si tu utilises une clé personnalisée
-    public $incrementing = false;
-    protected $keyType = 'string';
+    protected $table = 'programmes'; // nom exact de la table
 
     protected $fillable = [
-        'code_programme',      // ← à inclure si utilisé comme clé
         'code_ec',
-        'code_salle',
+        'salle_id',
         'heure_fin',
         'heure_debut',
-        'code_personel',
+        'code_personnel',
         'nombre_dheure',
         'statut',
         'date',
@@ -41,6 +36,6 @@ class Programme extends Model
 
     public function salle()
     {
-        return $this->belongsTo(Salle::class, 'code_salle', 'code_salle');
+        return $this->belongsTo(Salle::class, 'salle_id', 'id');
     }
 }

@@ -23,17 +23,20 @@ class UeController extends Controller
     {
         try {
             $validatedData = $request->validate([
-                'label_ue' => 'required|min:5|string',
-                'code_ue' => 'required|min:5|string|unique:ue,code_ue',
-                'description_ue' => 'required|min:5|string',
+                'code_ue'        => 'required|string|min:3|unique:ue,code_ue',
+                'label_ue'       => 'required|string|min:5',
+                'description_ue' => 'required|string|min:5',
+                 'code_niveau'    => 'required|string|exists:niveau,code_niveau',
+
             ]);
 
             $ue = Ue::create($validatedData);
 
             return response()->json([
                 "message" => "UE créée avec succès",
-                "data" => $ue
+                "data"    => $ue
             ], 201);
+
         } catch (\Throwable $th) {
             return response()->json([
                 'message' => $th->getMessage()
@@ -44,28 +47,36 @@ class UeController extends Controller
     /**
      * Affiche une UE spécifique.
      */
-    public function show(Ue $ue)
+    public function show(string $code_ue)
     {
-        return response()->json($ue, 200);
+        try {
+            $ue = Ue::findOrFail($code_ue);
+            return response()->json($ue, 200);
+        } catch (\Throwable $th) {
+            return response()->json(["message" => "UE non trouvée"], 404);
+        }
     }
 
     /**
      * Met à jour une UE existante.
      */
-    public function update(Request $request, Ue $ue)
+    public function update(Request $request, string $code_ue)
     {
         try {
+            $ue = Ue::findOrFail($code_ue);
+
             $validatedData = $request->validate([
-                'label_ue' => 'required|min:5|string',
-                'description_ue' => 'required|min:5|string',
+                'label_ue'       => 'sometimes|string|min:5',
+                'description_ue' => 'sometimes|string|min:5',
             ]);
 
             $ue->update($validatedData);
 
             return response()->json([
                 "message" => "UE mise à jour avec succès",
-                "data" => $ue
+                "data"    => $ue
             ], 200);
+
         } catch (\Throwable $th) {
             return response()->json([
                 'message' => $th->getMessage()

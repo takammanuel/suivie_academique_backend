@@ -9,7 +9,7 @@ class Ue extends Model
 {
     use HasFactory;
 
-    protected $table = 'ue'; // nom exact de la table
+    protected $table = 'ues'; // nom exact de la table
 
     protected $primaryKey = 'code_ue'; // clé primaire personnalisée
     public $incrementing = false; // car ce n’est pas un entier auto-incrémenté
@@ -28,3 +28,5 @@ class Ue extends Model
         return $this->belongsTo(Niveau::class, 'code_niveau', 'code_niveau');
     }
 }
+
+

@@ -23,22 +23,23 @@ class ProgrammeController extends Controller
     {
         try {
             $validatedData = $request->validate([
-                'code_ec' => 'required|min:5|string',
-                'code_salle' => 'required|min:5|string',
-                'code_personel' => 'required|integer',
-                'date' => 'required|date',
-                'heure_debut' => 'required|date_format:H:i',
-                'heure_fin' => 'required|date_format:H:i',
-                'nombre_dheure' => 'required|integer',
-                'statut' => 'required|string'
+                'code_ec'        => 'required|string|min:5',
+                'salle_id'        => 'required|integer|exists:salle,id',
+                'code_personnel' => 'required|string|min:3',
+                'date'           => 'required|date',
+                'heure_debut'    => 'required|date_format:H:i',
+                'heure_fin'      => 'required|date_format:H:i',
+                'nombre_dheure'  => 'required|integer|min:1',
+                'statut'         => 'required|string'
             ]);
 
             $programme = Programme::create($validatedData);
 
             return response()->json([
                 "message" => "Programme créé avec succès",
-                "data" => $programme
+                "data"    => $programme
             ], 201);
+
         } catch (\Throwable $th) {
             return response()->json([
                 'message' => $th->getMessage()
@@ -49,34 +50,42 @@ class ProgrammeController extends Controller
     /**
      * Affiche un programme spécifique.
      */
-    public function show(Programme $programme)
+    public function show(string $code_programme)
     {
-        return response()->json($programme, 200);
+        try {
+            $programme = Programme::findOrFail($code_programme);
+            return response()->json($programme, 200);
+        } catch (\Throwable $th) {
+            return response()->json(["message" => "Programme non trouvé"], 404);
+        }
     }
 
     /**
      * Met à jour un programme existant.
      */
-    public function update(Request $request, Programme $programme)
+    public function update(Request $request, string $code_programme)
     {
         try {
+            $programme = Programme::findOrFail($code_programme);
+
             $validatedData = $request->validate([
-                'code_ec' => 'required|min:5|string',
-                'code_salle' => 'required|min:5|string',
-                'code_personel' => 'required|integer',
-                'date' => 'required|date',
-                'heure_debut' => 'required|date_format:H:i',
-                'heure_fin' => 'required|date_format:H:i',
-                'nombre_dheure' => 'required|integer',
-                'statut' => 'required|string'
+                'code_ec'        => 'sometimes|string|min:5',
+                'salle_id'        => 'sometimes|integer|exists:salle,id',
+                'code_personnel' => 'sometimes|string|min:3',
+                'date'           => 'sometimes|date',
+                'heure_debut'    => 'sometimes|date_format:H:i',
+                'heure_fin'      => 'sometimes|date_format:H:i',
+                'nombre_dheure'  => 'sometimes|integer|min:1',
+                'statut'         => 'sometimes|string'
             ]);
 
             $programme->update($validatedData);
 
             return response()->json([
                 "message" => "Programme mis à jour avec succès",
-                "data" => $programme
+                "data"    => $programme
             ], 200);
+
         } catch (\Throwable $th) {
             return response()->json([
                 'message' => $th->getMessage()

@@ -11,24 +11,26 @@ return new class extends Migration
      */
     public function up(): void
     {
-    Schema::create('programme', function (Blueprint $table) {
+   Schema::create('programmes', function (Blueprint $table) {
     $table->id();
 
-    // code_ec doit être string car il référence ec.code_ec
+    // Référence EC
     $table->string("code_ec", 20);
-    $table->foreign("code_ec")->references("code_ec")->on("ec")->onDelete("cascade");
+    $table->foreign("code_ec")->references("code_ec")->on("ecs")->onDelete("cascade");
 
-    $table->unsignedBigInteger("code_salle");
-    $table->foreign("code_salle")->references("id")->on("salles")->onDelete("cascade");
+    // Référence Salle
+    $table->unsignedBigInteger('salle_id');
+    $table->foreign('salle_id')->references('id')->on('salle')->onDelete('cascade');
 
-    $table->unsignedBigInteger("code_personel");
-    $table->foreign("code_personel")->references("id")->on("personnels")->onDelete("cascade");
+    // Référence Personnel
+   $table->string('code_personnel', 20);
+$table->foreign('code_personnel')->references('code_personnel')->on('personnel')->onDelete('cascade');
 
     $table->date("date");
     $table->time("heure_debut");
     $table->time("heure_fin");
-    $table->integer("nombre_dheure"); // ⚠️ pas d'apostrophe dans le nom de colonne
-    $table->string("statut");
+    $table->integer("nombre_dheure");
+    $table->string("statut", 50);
     $table->timestamps();
 });
     }
@@ -38,6 +40,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('programme');
+        Schema::dropIfExists('programmes');
     }
 };

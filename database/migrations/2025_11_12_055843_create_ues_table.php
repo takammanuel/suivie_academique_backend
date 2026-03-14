@@ -11,14 +11,20 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('ue', function (Blueprint $table) {
-            $table->string("code_ue")->primary();
-            $table->string("label_ue");
-            $table->text("description_ue");
-            $table->unsignedInteger("code_niveau");
-            $table->foreign("code_niveau")->references("code_niveau")->on("niveau")->onDelete("cascade");
-            $table->timestamps();
-        });
+     Schema::create('ues', function (Blueprint $table) {
+    $table->string('code_ue', 20)->primary();
+    $table->string('label_ue', 191);
+    $table->string('description_ue', 255);
+
+    // Ici on définit code_niveau comme VARCHAR
+    $table->string('code_niveau', 20);
+    $table->foreign('code_niveau')
+          ->references('code_niveau')
+          ->on('niveaux')
+          ->onDelete('cascade');
+
+    $table->timestamps();
+});
     }
 
     /**

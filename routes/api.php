@@ -10,6 +10,7 @@ use App\Http\Controllers\EcController;
 use App\Http\Controllers\SalleController;
 use App\Http\Controllers\PersonnelController;
 use App\Http\Controllers\EnseigneController;
+use App\Http\Controllers\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,16 +24,30 @@ use App\Http\Controllers\EnseigneController;
 */
 
 // Route protégée par Sanctum
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
-// Routes pour la gestion des filières
-Route::apiResource('filieres', FiliereController::class);
+Route::apiResource('personnels', PersonnelController::class);
 Route::apiResource('niveaux', NiveauController::class);
+Route::apiResource('salles', SalleController::class);
+Route::apiResource('filieres', FiliereController::class);
+Route::apiResource('ecs', EcController::class);
+Route::get('/filieres/export/excel', [FiliereController::class, 'exportExcel']);
+Route::get('/filieres/export/pdf', [FiliereController::class, 'exportPdf']);
+
+Route::middleware("auth:sanctum")->group(function(){
+
 Route::apiResource('ues', UeController::class);
 Route::apiResource('programmes', ProgrammeController::class);
-Route::apiResource('ecs', EcController::class);
-Route::apiResource('salles', SalleController::class);
-Route::apiResource('personnels', PersonnelController::class);
-Route::apiResource('enseignes', EnseigneController::class);
+
+});
+
+// Les routes pour Enseigne utilisent une clé composite (code_ec + code_personnel)
+// Remplaçons la resource par des routes explicites pour accepter les deux segments
+Route::middleware('auth:sanctum')->group(function () {
+	Route::get('enseignes', [EnseigneController::class, 'index']);
+	Route::post('enseignes', [EnseigneController::class, 'store']);
+	Route::get('enseignes/{code_ec}/{code_personnel}', [EnseigneController::class, 'show']);
+	Route::put('enseignes/{code_ec}/{code_personnel}', [EnseigneController::class, 'update']);
+	Route::delete('enseignes/{code_ec}/{code_personnel}', [EnseigneController::class, 'destroy']);
+});
+
+Route::post("/login",[AuthController::class,"login"]);
+

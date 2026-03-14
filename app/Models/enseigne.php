@@ -9,16 +9,15 @@ class Enseigne extends Model
 {
     use HasFactory;
 
-    // Nom de la table
-    protected $table = 'enseigne';
+    protected $table = 'enseigne'; // cohérent avec ta migration
 
-    // Colonnes autorisées pour l'insertion/mise à jour
     protected $fillable = [
         'code_ec',
         'code_personnel',
     ];
 
-    // Relations
+    public $timestamps = true;
+
     public function ec()
     {
         return $this->belongsTo(Ec::class, 'code_ec', 'code_ec');

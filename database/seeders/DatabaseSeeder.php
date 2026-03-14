@@ -2,8 +2,17 @@
 
 namespace Database\Seeders;
 
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Filiere;
+use App\Models\Niveau;
+use App\Models\EC;
+use App\Models\Ue;
+use App\Models\Salle;
+use App\Models\Enseigne;
+use App\Models\Personnel;
+Use App\Models\Programme;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+
 
 class DatabaseSeeder extends Seeder
 {
@@ -12,11 +21,13 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // \App\Models\User::factory(10)->create();
-
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+        //Filiere::factory(2000)->create();
+        //Niveau::factory(500)->create();
+        //Ec::factory(10)->create();
+        Ue::factory(300)->create();
+        //Salle::factory(650)->create();
+        //Enseigne::factory(1500)->create();
+        //Personnel::factory(100)->create();
+       // Programme::factory(500)->create();
     }
 }

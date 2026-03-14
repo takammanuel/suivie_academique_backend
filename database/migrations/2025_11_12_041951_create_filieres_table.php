@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('filiere', function (Blueprint $table) {
+        Schema::create('filieres', function (Blueprint $table) {
             $table->string("code_filiere")->primary();
             $table->string('label_filiere', 256)->default("CDWFS");
             $table->string('description_filiere', 512); // VARCHAR obligatoire
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('filiere');
+        Schema::dropIfExists('filieres');
     }
 };

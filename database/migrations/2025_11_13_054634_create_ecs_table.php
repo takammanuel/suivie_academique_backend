@@ -11,14 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-      Schema::create('ec', function (Blueprint $table) {
+      Schema::create('ecs', function (Blueprint $table) {
     $table->string("code_ec", 20)->primary();
     $table->string("label_ec", 256);
     $table->text("description_ec")->nullable();
     $table->integer("nb_heures_ec");
     $table->integer("nb_credit_ec");
     $table->string("code_ue");
-    $table->foreign("code_ue")->references("code_ue")->on("ue")->onDelete("cascade");
+    $table->foreign("code_ue")->references("code_ue")->on("ues")->onDelete("cascade");
     $table->timestamps();
 });
     }
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('ec');
+        Schema::dropIfExists('ecs');
     }
 };

@@ -10,9 +10,9 @@ class SalleController extends Controller
     /**
      * Affiche la liste des salles.
      */
-    public function index()
+  public function index()
     {
-        $salles = Salle::all();
+        $salles = Salle::all(); // resultats par page
         return response()->json($salles, 200);
     }
 
@@ -23,16 +23,17 @@ class SalleController extends Controller
     {
         try {
             $validatedData = $request->validate([
-                'contenance' => 'required|min:5|string',
-                'status' => 'required|min:5|string',
+                'contenance' => 'required|integer|min:1',
+                'status'     => 'required|string|min:3|max:50',
             ]);
 
             $salle = Salle::create($validatedData);
 
             return response()->json([
                 "message" => "Salle créée avec succès",
-                "data" => $salle
+                "data"    => $salle
             ], 201);
+
         } catch (\Throwable $th) {
             return response()->json([
                 'message' => $th->getMessage()
@@ -43,28 +44,36 @@ class SalleController extends Controller
     /**
      * Affiche une salle spécifique.
      */
-    public function show(Salle $salle)
+    public function show(string $code_salle)
     {
-        return response()->json($salle, 200);
+        try {
+            $salle = Salle::findOrFail($code_salle);
+            return response()->json($salle, 200);
+        } catch (\Throwable $th) {
+            return response()->json(["message" => "Salle non trouvée"], 404);
+        }
     }
 
     /**
      * Met à jour une salle existante.
      */
-    public function update(Request $request, Salle $salle)
+    public function update(Request $request, string $code_salle)
     {
         try {
+            $salle = Salle::findOrFail($code_salle);
+
             $validatedData = $request->validate([
-                'contenance' => 'required|min:5|string',
-                'status' => 'required|min:5|string',
+                'contenance' => 'sometimes|integer|min:1',
+                'status'     => 'sometimes|string|min:3|max:50',
             ]);
 
             $salle->update($validatedData);
 
             return response()->json([
                 "message" => "Salle mise à jour avec succès",
-                "data" => $salle
+                "data"    => $salle
             ], 200);
+
         } catch (\Throwable $th) {
             return response()->json([
                 'message' => $th->getMessage()

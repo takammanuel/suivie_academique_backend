@@ -13,7 +13,7 @@ return new class extends Migration
     {
          Schema::create('enseigne', function (Blueprint $table) {
             $table->string('code_ec', 20); // cohérent avec ec.code_ec
-            $table->foreign('code_ec')->references('code_ec')->on('ec')->onDelete('cascade');
+            $table->foreign('code_ec')->references('code_ec')->on('ecs')->onDelete('cascade');
 
             $table->string('code_personnel', 20); // <-- modifié en varchar
             $table->foreign('code_personnel')->references('code_personnel')->on('personnel')->onDelete('cascade');
