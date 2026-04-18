@@ -2,20 +2,20 @@ name: Deploiement Automatique o2switch
 on:
   push:
     branches:
-      - main  # Se lance dès que tu fais un push sur la branche main
+      - main
 
 jobs:
   web-deploy:
-    name:  Sync Files
+    name: Sync Files
     runs-on: ubuntu-latest
     steps:
-      - name:  Récupérer le code
+      - name: Récupérer le code
         uses: actions/checkout@v4
 
-      - name:  Envoi vers o2switch
+      - name: Envoi vers o2switch
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
-         server: ${{ secrets.FTP_SERVER }}
+          server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           server-dir: ./
