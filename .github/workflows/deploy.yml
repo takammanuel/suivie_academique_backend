@@ -15,8 +15,9 @@ jobs:
       - name:  Envoi vers o2switch
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
-          server: ${{ secrets.FTP_SERVER }}
+         server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          # Ton compte FTP est déjà verrouillé sur ton répertoire personnel
           server-dir: ./
+          port: 21
+          protocol: ftp
