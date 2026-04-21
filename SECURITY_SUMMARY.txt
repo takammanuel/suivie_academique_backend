@@ -1,0 +1,173 @@
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                                                                              ║
+║              🔒 MÉCANISMES DE SÉCURITÉ IMPLÉMENTÉS                           ║
+║                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ 1️⃣  RATE LIMITING (Protection contre Force Brute)                           │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+  📍 Endpoint protégé : POST /api/login
+  
+  ⚙️  Configuration :
+      • Limite : 5 tentatives par minute par IP
+      • Blocage : 60 secondes après dépassement
+      • Réinitialisation : Automatique après connexion réussie
+  
+  ✅ Avantages :
+      ✓ Empêche les attaques par force brute
+      ✓ Protège les comptes utilisateurs
+      ✓ Réduit la charge serveur
+  
+  📝 Exemple de réponse (429 Too Many Requests) :
+      {
+        "message": "Trop de tentatives. Réessayez dans 45 secondes.",
+        "retry_after": 45
+      }
+
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ 2️⃣  EXPIRATION AUTOMATIQUE DES TOKENS                                       │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+  ⏰ Durée par défaut : 1440 minutes (24 heures)
+  
+  ⚙️  Configuration :
+      • Variable : SANCTUM_TOKEN_EXPIRATION dans .env
+      • Middleware : CheckTokenExpiration
+      • Vérification : Automatique sur chaque requête protégée
+  
+  ✅ Avantages :
+      ✓ Limite la durée de validité des sessions
+      ✓ Réduit les risques en cas de vol de token
+      ✓ Force une réauthentification régulière
+      ✓ Suppression automatique des tokens expirés
+  
+  📝 Exemple de réponse lors de la connexion :
+      {
+        "access_token": "1|abc123...",
+        "token_type": "Bearer",
+        "expires_at": "2026-04-15T02:00:00+00:00",
+        "personnel": {...}
+      }
+  
+  📝 Exemple de réponse si token expiré (401 Unauthorized) :
+      {
+        "message": "Votre session a expiré. Veuillez vous reconnecter.",
+        "error": "token_expired"
+      }
+
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ 📊 RÉSUMÉ DES PROTECTIONS PAR ENDPOINT                                       │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+  ┌─────────────────────┬────────┬─────────────────────────────────────────┐
+  │ Endpoint            │ Méthode│ Protection                              │
+  ├─────────────────────┼────────┼─────────────────────────────────────────┤
+  │ /api/login          │ POST   │ ⚡ Rate Limiting (5/min)                │
+  │ /api/logout         │ POST   │ 🔐 Auth + 🕐 Token Expiration          │
+  │ /api/ues/*          │ *      │ 🔐 Auth + 🕐 Token Expiration          │
+  │ /api/programmes/*   │ *      │ 🔐 Auth + 🕐 Token Expiration          │
+  │ /api/enseignes/*    │ *      │ 🔐 Auth + 🕐 Token Expiration          │
+  └─────────────────────┴────────┴─────────────────────────────────────────┘
+
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ 🔧 CONFIGURATION                                                             │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+  Fichier .env :
+  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  
+  # Expiration des tokens (en minutes)
+  SANCTUM_TOKEN_EXPIRATION=1440  # 24 heures (défaut)
+  
+  Exemples de configuration :
+  • 60    = 1 heure
+  • 480   = 8 heures
+  • 1440  = 24 heures (recommandé)
+  • 10080 = 7 jours
+
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ 🧪 TESTS RAPIDES                                                             │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+  Test du Rate Limiting :
+  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  
+  # Faire 6 tentatives rapides (la 6ème sera bloquée)
+  for i in {1..6}; do
+    curl -X POST http://localhost:8080/api/login \
+      -H "Content-Type: application/json" \
+      -d '{"login_personnel":"test","password_personnel":"wrong"}'
+  done
+  
+  
+  Test de l'Expiration :
+  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  
+  1. Se connecter et récupérer le token
+  2. Utiliser le token pour accéder à une ressource protégée
+  3. Attendre l'expiration (ou réduire SANCTUM_TOKEN_EXPIRATION=1)
+  4. Réessayer - devrait retourner 401
+
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ 📁 FICHIERS MODIFIÉS                                                         │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+  ✓ app/Http/Controllers/AuthController.php
+    → Ajout du rate limiting et gestion de l'expiration
+  
+  ✓ app/Http/Middleware/CheckTokenExpiration.php (NOUVEAU)
+    → Middleware de vérification d'expiration
+  
+  ✓ app/Http/Kernel.php
+    → Enregistrement du middleware
+  
+  ✓ routes/api.php
+    → Application du middleware aux routes protégées
+  
+  ✓ config/sanctum.php
+    → Configuration de l'expiration des tokens
+  
+  ✓ .env.example
+    → Documentation de SANCTUM_TOKEN_EXPIRATION
+  
+  ✓ SECURITY.md (NOUVEAU)
+    → Documentation complète des mécanismes
+
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ 📚 DOCUMENTATION                                                             │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+  Pour plus de détails, consultez :
+  
+  📄 SECURITY.md
+     → Guide complet des mécanismes de sécurité
+     → Exemples de code
+     → Recommandations
+     → Tests détaillés
+
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ ✅ COMMIT & PUSH                                                             │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+  Commit créé avec succès !
+  
+  Pour pousser les changements :
+  
+  cd suivie-academique-backend
+  git push
+
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                                                                              ║
+║                    🎉 Sécurité renforcée avec succès ! 🔒                    ║
+║                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
