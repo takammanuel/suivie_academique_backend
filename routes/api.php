@@ -29,8 +29,12 @@ Route::apiResource('ecs', EcController::class);
 Route::get('/filieres/export/excel', [FiliereController::class, 'exportExcel']);
 Route::get('/filieres/export/pdf', [FiliereController::class, 'exportPdf']);
 
-// --- ROUTES PROTEGEES (SANCTUM) ---
-Route::middleware("auth:sanctum")->group(function(){
+// --- ROUTES PROTEGEES (SANCTUM + VERIFICATION EXPIRATION TOKEN) ---
+Route::middleware(['auth:sanctum', 'check.token.expiration'])->group(function(){
+    // Route de déconnexion
+    Route::post('/logout', [AuthController::class, 'logout']);
+    
+    // Routes ressources protégées
     Route::apiResource('ues', UeController::class);
     Route::apiResource('programmes', ProgrammeController::class);
 
