@@ -17,7 +17,8 @@ class LoginMailTest extends TestCase
     {
         Mail::fake();
 
-        $password = 'secret123';
+        // Utiliser un mot de passe généré aléatoirement pour les tests
+        $password = bin2hex(random_bytes(16));
         $personnel = Personnel::factory()->create([
             'login_personnel' => 'dev@example.com',
             'password_personnel' => Hash::make($password),

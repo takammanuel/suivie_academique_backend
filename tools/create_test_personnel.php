@@ -7,8 +7,9 @@ $kernel->bootstrap();
 use App\Models\Personnel;
 use Illuminate\Support\Facades\Hash;
 
-$login = 'dev+mailtest@example.com';
-$password = 'SecretPwd123';
+// Utiliser des variables d'environnement pour les credentials sensibles
+$login = env('TEST_PERSONNEL_LOGIN', 'dev+mailtest@example.com');
+$password = env('TEST_PERSONNEL_PASSWORD', bin2hex(random_bytes(16)));
 
 $existing = Personnel::where('login_personnel', $login)->first();
 if ($existing) {
@@ -26,4 +27,5 @@ $pers = Personnel::create([
     'type_personnel' => 'ENSEIGNANT'
 ]);
 
-echo "Created personnel {$login} with password {$password}\n";
+// Ne jamais afficher le mot de passe en clair
+echo "Created personnel {$login} successfully\n";
