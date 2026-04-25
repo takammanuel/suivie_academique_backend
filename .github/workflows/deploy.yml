@@ -1,4 +1,6 @@
 name: Deploiement Automatique o2switch
+
+# Le déploiement se lance automatiquement dès qu'un changement est validé sur 'main'
 on:
   push:
     branches:
@@ -9,15 +11,23 @@ jobs:
     name: Sync Files
     runs-on: ubuntu-latest
     steps:
+      # ÉTAPE 1 : Récupération du code depuis le dépôt GitHub
       - name: Récupérer le code
         uses: actions/checkout@v4
 
+      # ÉTAPE 2 : Synchronisation des fichiers vers le serveur o2switch
+      # On utilise le protocole FTP car SSH est souvent limité en mutualisé
       - name: Envoi vers o2switch
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
+          # Informations de connexion stockées en sécurité dans les GitHub Secrets
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
+
+          # Dossier de destination sur l'hébergement o2switch
           server-dir: ./public_html/takam/
+
+          # Configuration réseau standard
           port: 21
           protocol: ftp
