@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        //Filiere::factory(2000)->create();
+        Filiere::factory(2000)->create();
         //Niveau::factory(500)->create();
         //Ec::factory(10)->create();
         Ue::factory(300)->create();

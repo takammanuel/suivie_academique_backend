@@ -4,7 +4,7 @@ global:
 scrape_configs:
   # 1. Ton application Laravel (Filières, Étudiants, etc.)
   - job_name: 'laravel-backend'
-    metrics_path: '/api/grafana-score'  # <--- TRÈS IMPORTANT : définit l'URL de ton API
+    metrics_path: '/prometheus'  # <--- TRÈS IMPORTANT : définit l'URL de ton API
     static_configs:
       - targets: ['app:8000']
 
