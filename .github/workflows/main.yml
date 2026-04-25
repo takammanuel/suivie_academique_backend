@@ -52,5 +52,5 @@ jobs:
         with:
           context: .
           push: true
-          # Note: l'image sera nommée suivie-academique-backend sur ton Docker Hub
+          # Note: l'image sera nommée suivie-academique-backend sur  Docker Hub
           tags: ${{ secrets.DOCKER_USERNAME }}/suivie-academique-backend:latest
